@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPOT FINDER - Smart Car Parking</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="welcome">
+        <h1>🚗 Welcome to <span>SPOT FINDER</span> </h1>
+    </div>
+
+    <div class="dashboard">
+        <header>
+            <h2><i class="fa-solid fa-car-side"></i> Smart Car Parking</h2>
+        </header>
+
+        <section class="status">
+            <div class="status-box">
+                <p><i class="fa-solid fa-square-parking"></i> <strong>Total Spaces:</strong> <span id="total-spots">10</span></p>
+            </div>
+            <div class="status-space"></div>
+            <div class="status-box available">
+                <p><i class="fa-solid fa-car"></i> <strong>Available Spaces:</strong> <span id="available-spots">10</span></p>
+            </div>
+        </section>
+
+        <section class="parking-area">
+            <h2>🅿️ Available Parking Spots</h2>
+            <div class="parking-list" id="parking-list">
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
