@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
+
 rf = Roboflow(api_key= API_KEY)
 project = rf.workspace().project("parking-space-1srdb")
 model = project.version(4).model
@@ -30,3 +31,6 @@ def predict():
         scene=annotated_image, detections=detections, labels=labels)
 
     cv2.imwrite("annotated_img.jpg", annotated_image)
+    vacant_count = sum(1 for item in result["predictions"] if item.get("class") == "vacant")
+    occ_count = sum(1 for item in result["predictions"] if item.get("class") == "occupied")
+    return {"vacant" : vacant_count, "occupied": occ_count}
