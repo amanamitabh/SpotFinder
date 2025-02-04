@@ -1,68 +1,43 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let totalSpots = 10;
-    let availableSpots = 10;
+    // Each parking zone has 5 spots
+    let totalSpotsPerZone = 5;  
+    let parkingZones = [
+        { id: 1, name: "Parking Zone 1", available: 5, lat: 37.7749, lng: -122.4194 },
+        { id: 2, name: "Parking Zone 2", available: 5, lat: 40.7128, lng: -74.0060 }
+    ];
+
     let parkingList = document.getElementById("parking-list");
     let availableSpotsElement = document.getElementById("available-spots");
 
-   
-    const parkingLocations = [
-        { id: 1, lat: 37.7749, lng: -122.4194 }, 
-        { id: 2, lat: 40.7128, lng: -74.0060 }, 
-        { id: 3, lat: 34.0522, lng: -118.2437 }, 
-        { id: 4, lat: 51.5074, lng: -0.1278 },   
-        { id: 5, lat: 48.8566, lng: 2.3522 },  
-    ]  
-
+    // Function to update UI without changing zone names
     function updateParkingDisplay() {
-        parkingList.innerHTML = "";
-        availableSpotsElement.textContent = availableSpots;
+        parkingList.innerHTML = ""; // Clear previous UI
+        let totalAvailableSpots = parkingZones.reduce((sum, zone) => sum + zone.available, 0);
+        availableSpotsElement.textContent = totalAvailableSpots; // Update total available spots count
 
-        for (let i = 0; i < availableSpots; i++) {
+        parkingZones.forEach((zone) => {
             let spot = document.createElement("div");
-            spot.className = "parking-spot";
+            spot.className = `parking-spot ${zone.available > 0 ? "available" : "full"}`;
             spot.innerHTML = `
-                <span>Parking Spot ${i + 1}</span>
-                <a href="https://www.google.com/maps?q=${parkingLocations[i % parkingLocations.length].lat},${parkingLocations[i % parkingLocations.length].lng}" 
-                   target="_blank">📍 View on Map</a>
+                <span>${zone.name}</span>
+                <p>${zone.available} Open Spots</p>
+                <a href="https://www.google.com/maps?q=${zone.lat},${zone.lng}" target="_blank">📍 Navigate</a>
             `;
             parkingList.appendChild(spot);
-        }
+        });
     }
 
-    setInterval(() => {
-        let randomChange = Math.random() > 0.5 ? 1 : -1;
-        availableSpots = Math.max(0, Math.min(totalSpots, availableSpots + randomChange));
+    // Simulate parking changes while keeping zones fixed
+    function simulateParkingChanges() {
+        parkingZones.forEach((zone) => {
+            let randomChange = Math.random() > 0.5 ? 1 : -1;
+            zone.available = Math.max(0, Math.min(totalSpotsPerZone, zone.available + randomChange));
+        });
+
         updateParkingDisplay();
-    }, 5000);
+    }
 
+    // Update every 5 seconds
+    setInterval(simulateParkingChanges, 5000);
     updateParkingDisplay();
-});
-document.addEventListener("DOMContentLoaded", () => {
-    let parkingList = document.getElementById("parking-list");
-    let availableSpotsElement = document.getElementById("available-spots");
-
-    function updateParkingDisplay(availableSpots, totalSpots) {
-        parkingList.innerHTML = "";
-        availableSpotsElement.textContent = availableSpots;
-
-        for (let i = 0; i < availableSpots; i++) {
-            let spot = document.createElement("div");
-            spot.className = "parking-spot";
-            spot.innerHTML = `
-                <span>🅿️ Spot ${i + 1}</span>
-                <a href="https://www.google.com/maps?q=37.7749,-122.4194" target="_blank">📍 Navigate</a>
-            `;
-            parkingList.appendChild(spot);
-        }
-    }
-
-    function fetchParkingData() {
-        fetch("http://127.0.0.1:5000/get_parking_data")
-            .then(response => response.json())
-            .then(data => updateParkingDisplay(data.available_spots, data.total_spots))
-            .catch(error => console.error("Error fetching data:", error));
-    }
-
-    setInterval(fetchParkingData, 5000);
-    fetchParkingData();
 });

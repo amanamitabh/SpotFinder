@@ -84,35 +84,37 @@ h2 {
     text-shadow: 0 0 5px #00ff80;
     margin-bottom: 15px;
 }
-
-
 .parking-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-
 .parking-spot {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px;
-    background: radial-gradient(circle, #222, #111);
     border-radius: 10px;
     border: 2px solid #00ff80;
     box-shadow: 0 0 8px rgba(0, 255, 128, 0.3);
     transition: transform 0.3s ease-in-out;
-}
-
-.parking-spot:hover {
-    transform: scale(1.08);
-}
-
-.parking-spot span {
     font-size: 18px;
-    color: #ffffff;
+    color: white;
+    width: 100%;
 }
-
+.parking-spot p {
+    font-size: 16px;
+    font-weight: bold;
+}
+.parking-spot.available {
+    background: #007f00; 
+}
+.parking-spot.full {
+    background: #8b0000; 
+}
+.parking-spot:hover {
+    transform: scale(1.05);
+}
 .parking-spot a {
     text-decoration: none;
     background: #00ff80;
@@ -122,13 +124,10 @@ h2 {
     font-weight: bold;
     transition: background 0.3s;
 }
-
 .parking-spot a:hover {
     background: #00cc66;
     box-shadow: 0 0 10px #00ff80;
 }
-
-
 @media (max-width: 600px) {
     .status {
         flex-direction: column;
@@ -138,13 +137,11 @@ h2 {
         margin-bottom: 10px;
     }
 }
-
 .welcome {
     text-align: center;
     padding: 20px;
     margin-bottom: 20px;
 }
-
 .welcome h1 {
     font-size: 40px;
     font-weight: bold;
@@ -152,7 +149,6 @@ h2 {
     text-shadow: 0 0 15px #00ff80, 0 0 30px #00ff80;
     animation: glow-text 1.5s infinite alternate;
 }
-
 .welcome span {
     color: #ffcc00;
     text-shadow: 0 0 15px #ffcc00, 0 0 30px #ffcc00;
@@ -165,4 +161,3 @@ h2 {
         text-shadow: 0 0 20px #00ff80, 0 0 40px #00ff80;
     }
 }
-
