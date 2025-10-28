@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Orbitron", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #002244);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+    color: #ffffff;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.dashboard {
+    max-width: 600px;
+    background: rgba(17, 17, 17, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 255, 128, 0.5);
+    border: 3px solid #00ff80;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #00ff80;
+    text-shadow: 0 0 10px #00ff80;
+    text-align:left;
+    margin-left:-100px;
+}
+.status {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.status-box {
+    background: linear-gradient(135deg, #222, #333);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 128, 0.3);
+    width: 48%;
+    transition: transform 0.3s ease-in-out;
+}
+
+.status-box:hover {
+    transform: scale(1.05);
+}
+
+.available {
+    border: 2px solid #00ff80;
+}
+
+.status-box p {
+    font-size: 18px;
+}
+
+.status-box i {
+    font-size: 20px;
+    color: #00ff80;
+    margin-right: 5px;
+}
+
+
+.parking-area {
+    text-align: left;
+    padding: 10px;
+}
+
+h2 {
+    font-size: 22px;
+    color: #00ff80;
+    text-shadow: 0 0 5px #00ff80;
+    margin-bottom: 15px;
+}
+.parking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.parking-spot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #00ff80;
+    box-shadow: 0 0 8px rgba(0, 255, 128, 0.3);
+    transition: transform 0.3s ease-in-out;
+    font-size: 18px;
+    color: white;
+    width: 100%;
+}
+.parking-spot p {
+    font-size: 16px;
+    font-weight: bold;
+}
+.parking-spot.available {
+    background: #007f00; 
+}
+.parking-spot.full {
+    background: #8b0000; 
+}
+.parking-spot:hover {
+    transform: scale(1.05);
+}
+.parking-spot a {
+    text-decoration: none;
+    background: #00ff80;
+    color: #121212;
+    padding: 7px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.parking-spot a:hover {
+    background: #00cc66;
+    box-shadow: 0 0 10px #00ff80;
+}
+@media (max-width: 600px) {
+    .status {
+        flex-direction: column;
+    }
+    .status-box {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+.welcome {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.welcome h1 {
+    font-size: 40px;
+    font-weight: bold;
+    color: #00ff80;
+    text-shadow: 0 0 15px #00ff80, 0 0 30px #00ff80;
+    animation: glow-text 1.5s infinite alternate;
+}
+.welcome span {
+    color: #ffcc00;
+    text-shadow: 0 0 15px #ffcc00, 0 0 30px #ffcc00;
+}
+@keyframes glow-text {
+    0% {
+        text-shadow: 0 0 15px #00ff80, 0 0 30px #00ff80;
+    }
+    100% {
+        text-shadow: 0 0 20px #00ff80, 0 0 40px #00ff80;
+    }
+}
