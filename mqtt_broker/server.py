@@ -3,7 +3,8 @@ import time
 import os
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
-import mysql.connector as mysql
+from sqlalchemy import create_engine
+from sqlalchemy.engine import URL
 
 load_dotenv()
 
@@ -13,10 +14,17 @@ usr = os.getenv('USER')
 pwd = os.getenv('PASSWORD')
 port = os.getenv('PORT')
 
-'''
-con_obj = mysql.connect(host= server, database = db , username=usr, password=pwd)
-mycur = con_obj.cursor()
-'''
+conn_url = URL.create(
+    drivername="postgresql+psycopg2",
+    username=usr,
+    password=pwd,
+    host=server,
+    port=port,
+    database=db
+)
+
+engine = create_engine(conn_url)
+
 
 id = '47569a54-a0fa-47a5-a01a-946274c0d0e3'
 
