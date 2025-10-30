@@ -8,6 +8,7 @@ from sqlalchemy.engine import URL
 
 load_dotenv()
 
+drivername = os.getenv('DRIVERNAME')
 server = os.getenv('SERVER')
 db = os.getenv('DATABASE')
 usr = os.getenv('USER')
@@ -15,7 +16,7 @@ pwd = os.getenv('PASSWORD')
 port = os.getenv('PORT')
 
 conn_url = URL.create(
-    drivername="postgresql+psycopg2",
+    drivername=drivername,
     username=usr,
     password=pwd,
     host=server,
