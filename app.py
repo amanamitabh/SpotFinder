@@ -92,8 +92,9 @@ while True:
 
     # Parse GPS data
     msg = pynmea2.parse(line)
-    stats["lat"] = msg.latitude
-    stats["lon"] = msg.longitude
+    stats["lat"] = round(msg.latitude, 9)
+    stats["lon"] = round(msg.longitude, 9)
+    stats["client_name"] = client_name
 
 
     data = json.dumps(stats)
