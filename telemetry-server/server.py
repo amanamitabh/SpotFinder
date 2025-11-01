@@ -23,7 +23,7 @@ def handle_telemetry(client, userdata, message):
     longitude = payload.get("lon", 0.0)
     vacant = payload.get("vacant", 0)
     occupied = payload.get("occupied", 0)
-    print(f"Telemetry from {client_name}\nLat: {latitude}, Lon: {longitude}, Vacant: {vacant}, Occupied: {occupied}\n")
+    print(f"Telemetry from {client_name}\nLat: {latitude}, Lon: {longitude}, Vacant: {vacant}, Occupied: {occupied}")
     try:
         with connection.begin():  # automatically commits or rolls back
             # Ensure parking lot exists
@@ -60,7 +60,7 @@ def handle_telemetry(client, userdata, message):
                 }
             )
 
-        print(f"Telemetry data stored for {client_name}")
+        print(f"Telemetry data stored for {client_name}\n")
 
     except Exception as e:
         print(f"Database operation failed: {e}")
