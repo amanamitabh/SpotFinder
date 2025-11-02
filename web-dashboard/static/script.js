@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             spot.className = `parking-spot ${vacant > 0 ? "available" : "full"}`;
             spot.innerHTML = `
                 <span>${zone.client_name}</span>
-                <p>${vacant} Open Spots</p>
+                <p>${vacant}<br>Open Spots</p>
                 <a href="https://www.google.com/maps?q=${zone.latitude},${zone.longitude}" target="_blank">📍 Navigate</a>
             `;
             parkingList.appendChild(spot);
