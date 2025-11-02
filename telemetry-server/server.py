@@ -75,6 +75,9 @@ db = os.getenv('DATABASE')
 usr = os.getenv('USER')
 pwd = os.getenv('PASSWORD')
 port = os.getenv('PORT')
+id = os.getenv('UUID')
+device_name = os.getenv('DEVICE_NAME')
+topic = os.getenv('TOPIC')
 
 
 # Creating database connection
@@ -93,11 +96,11 @@ connection = engine.connect()
 
 
 # Defining unique device ID and client name
-id = '47569a54-a0fa-47a5-a01a-946274c0d0e3'
-client_name = id + 'mqtt_broker'
+
+client_name = id + '_' + device_name
 
 # Defining telemetry topic for receiving telemetry
-client_telemetry_topic = id + '/spotfinder_gps'
+client_telemetry_topic = id + '/' + topic
 
 # Creating an MQTT client and connecting to the broker
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_name)

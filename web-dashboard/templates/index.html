@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPOT FINDER - Smart Car Parking</title>
-    <link rel="stylesheet" href="style.css">
-    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
@@ -20,16 +20,16 @@
 
         <section class="status">
             <div class="status-box">
-                <p><i class="fa-solid fa-square-parking"></i> <strong>Total Spaces:</strong> <span id="total-spots">10</span></p>
+                <p><i class="fa-solid fa-square-parking"></i> <strong>Total Parking Spots:</strong> <span id="total-spots"></span></p>
             </div>
             <div class="status-space"></div>
             <div class="status-box available">
-                <p><i class="fa-solid fa-car"></i> <strong>Available Spaces:</strong> <span id="available-spots">10</span></p>
+                <p><i class="fa-solid fa-car"></i> <strong>Vacant Parking Spots:</strong> <span id="available-spots"></span></p>
             </div>
         </section>
 
         <section class="parking-area">
-            <h2>🅿️ Available Parking Spots</h2>
+            <h2>Available Parking Spots</h2>
             <div class="parking-list" id="parking-list">
             </div>
         </section>

@@ -1,3 +1,4 @@
+import os
 import time
 import io
 import json
@@ -5,9 +6,15 @@ import pynmea2
 import paho.mqtt.client as mqtt
 from counterfit_shims_picamera import PiCamera
 from counterfit_connection import CounterFitConnection
+from dotenv import load_dotenv
 import counterfit_shims_serial
 import model
 
+# Load environment variables
+load_dotenv()
+device_name = os.getenv('DEVICE_NAME')
+id = os.getenv('UUID')
+topic = os.getenv('TOPIC')
 
 def print_gps_data(line):
     """Print raw GPS data read from the serial input."""
@@ -27,7 +34,6 @@ def pad_coordinate(raw_value, direction):
     elif direction in ['E', 'W']:
         return raw_value.zfill(10)
     return raw_value
-
 
 
 def convert_to_decimal(raw_value, direction):
@@ -63,11 +69,10 @@ def convert_to_decimal(raw_value, direction):
 
 
 # Unique device and topic identifiers
-id = '47569a54-a0fa-47a5-a01a-946274c0d0e3'
-client_name = id + 'cam_client_1'
+client_name = id + '_' + device_name
 
 # Defining telemetry topic for receiving telemetry
-client_telemetry_topic = id + '/spotfinder_gps'
+client_telemetry_topic = id + '/' + topic
 
 # Creating MQTT client and connecting to broker
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_name)
