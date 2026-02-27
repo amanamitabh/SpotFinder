@@ -1,36 +1,76 @@
-from roboflow import Roboflow
+from ultralytics import YOLO
 import supervision as sv
 import cv2
 import os
 from dotenv import load_dotenv
 
-
+# Load environment variables
 load_dotenv()
+DEBUG = os.getenv("DEBUG")
 
-API_KEY = os.getenv('API_KEY')
+# Get the absolute path of weights and image
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+WEIGHTS_PATH = os.path.join(BASE_DIR, "model.pt")
+IMAGE_PATH = os.path.join(BASE_DIR, "image.jpg")
 
-rf = Roboflow(api_key= API_KEY)
-project = rf.workspace().project("parking-space-1srdb")
-model = project.version(4).model
+# Load the model weights
+model = YOLO(WEIGHTS_PATH)
+
+def annotate_result(result):
+    if int(DEBUG) == 1:
+        # Convert YOLO result to supervision detections
+        detections = sv.Detections.from_ultralytics(result)
+
+        # Create labels
+        labels = [
+            f"{result.names[int(cls)]} {conf:.2f}"
+            for cls, conf in zip(detections.class_id, detections.confidence)
+        ]
+
+        image = cv2.imread(IMAGE_PATH)
+
+        # Create Annotator objects
+        label_annotator = sv.LabelAnnotator()
+        box_annotator = sv.BoxAnnotator()
+
+        annotated_image = box_annotator.annotate(
+            scene=image,
+            detections=detections
+        )
+
+        annotated_image = label_annotator.annotate(
+            scene=annotated_image,
+            detections=detections,
+            labels=labels
+        )
+
+        # Save annotated image
+        output_path = os.path.join(BASE_DIR, "annotated_img.jpg")
+        cv2.imwrite(output_path, annotated_image)
 
 
 def predict():
-    result = model.predict("image.jpg", confidence=60).json()
-    labels = [item["class"] for item in result["predictions"]]
+    vac_count = 0
+    occ_count = 0
 
-    detections = sv.Detections.from_inference(result)
+    result = model.predict(source=IMAGE_PATH, conf=0.5)
 
-    label_annotator = sv.LabelAnnotator()
-    mask_annotator = sv.MaskAnnotator()
+    # Find counts of each class
+    for box in result[0].boxes:
+        class_id = int(box.cls[0])
+        class_name = model.names[class_id]
 
-    image = cv2.imread("image.jpg")
+        if class_name == "vacant":
+            vac_count += 1
+        
+        elif class_name == "occupied":
+            occ_count += 1
 
-    annotated_image = mask_annotator.annotate(
-        scene=image, detections=detections)
-    annotated_image = label_annotator.annotate(
-        scene=annotated_image, detections=detections, labels=labels)
+    # Extract inference time
+    inf_time = result[0].speed["inference"]
 
-    cv2.imwrite("annotated_img.jpg", annotated_image)
-    vacant_count = sum(1 for item in result["predictions"] if item.get("class") == "vacant")
-    occ_count = sum(1 for item in result["predictions"] if item.get("class") == "occupied")
-    return {"vacant" : vacant_count, "occupied": occ_count}
+    # Performs annotation only in debug mode
+    annotate_result(result[0])    
+
+    # Return detection result as a dictionary
+    return {"vacant" : vac_count, "occupied": occ_count, "inference_time_ms": round(inf_time, 2)}

@@ -110,7 +110,6 @@ try:
             camera.capture(image, 'jpeg')
             image.seek(0)
 
-
             # Store a copy of the latest image
             with open('image.jpg', 'wb') as image_file:
                 image_file.write(image.getvalue())
