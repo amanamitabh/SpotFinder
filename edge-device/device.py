@@ -97,40 +97,51 @@ try:
         
     # Infinite loop to continuously capture images, classify and send data
     while True:
-        # Read GPS data line from serial input
-        line = serial.readline().decode('utf-8')
-        if not line:
-            continue
+        try:
+            # Read GPS data line from serial input
+            line = serial.readline().decode('utf-8')
+            if not line:
+                continue
 
-        print_gps_data(line)
+            print_gps_data(line)
 
-        # Capture image from Picamera and store it in memory
-        image = io.BytesIO()
-        camera.capture(image, 'jpeg')
-        image.seek(0)
+            # Capture image from camera and store it in memory
+            image = io.BytesIO()
+            camera.capture(image, 'jpeg')
+            image.seek(0)
 
 
-        # Store a copy of the latest image
-        with open('image.jpg', 'wb') as image_file:
-            image_file.write(image.getvalue())
+            # Store a copy of the latest image
+            with open('image.jpg', 'wb') as image_file:
+                image_file.write(image.getvalue())
 
-        # Run ML model for parking occupancy detection
-        stats = model.predict()
+            # Run ML model for parking occupancy detection
+            stats = model.predict()
 
-        # Parse GPS NMEA sentence
-        msg = pynmea2.parse(line)
-        stats["lat"] = round(msg.latitude, 9)
-        stats["lon"] = round(msg.longitude, 9)
-        stats["client_name"] = client_name
+            # Parse GPS NMEA sentence
+            msg = pynmea2.parse(line)
+            stats["lat"] = round(msg.latitude, 9)
+            stats["lon"] = round(msg.longitude, 9)
+            stats["client_name"] = client_name
 
-        # Convert data to JSON and publish telemetry data to MQTT topic
-        data = json.dumps(stats)
-        print("Sending telemetry ", data)
-        mqtt_client.publish(client_telemetry_topic, data)
+            # Convert data to JSON and publish telemetry data to MQTT topic
+            data = json.dumps(stats)
+            print("Sending telemetry ", data)
+            mqtt_client.publish(client_telemetry_topic, data)
 
-        # Wait for 10 seconds before capturing the next image 
-        time.sleep(10)
+            # Wait for 10 seconds before capturing the next image 
+            time.sleep(10)
+
+        except pynmea2.ParseError as e:
+            print(f"GPS Parse Error: {e}")
+
+        except Exception as e:
+            print(f"Unexpected Error: {e}")
 
 
 except KeyboardInterrupt:
     print("Exiting...")
+
+finally:
+    mqtt_client.loop_stop()
+    mqtt_client.disconnect()
