@@ -78,6 +78,7 @@ port = os.getenv('PORT')
 id = os.getenv('UUID')
 device_name = os.getenv('DEVICE_NAME')
 topic = os.getenv('TOPIC')
+broker = os.getenv('BROKER')
 
 
 # Creating database connection
@@ -104,7 +105,7 @@ client_telemetry_topic = id + '/' + topic
 
 # Creating an MQTT client and connecting to the broker
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_name)
-mqtt_client.connect('test.mosquitto.org', 1883)
+mqtt_client.connect(broker, 1883)
 
 # Starting the MQTT client loop in background
 mqtt_client.loop_start()

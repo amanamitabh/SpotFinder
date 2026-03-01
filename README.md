@@ -1,51 +1,61 @@
-# 🚗 SpotFinder – AI & IoT Based Smart Parking Finder
+# SpotFinder
 
-**SpotFinder** is a real-time, AI-powered parking space detection system that uses **YOLOv8** and **MQTT** to monitor and display live parking availability. Designed for urban parking efficiency, this system was built as part of a hackathon and won the **Runner-Up** position for its practical and innovative use of technology.
+**SpotFinder** is a parking space detection system that leverages computer vision and IoT communication to detect and display parking space availability. The system provides near real-time parking availability updates using **YOLOv8** for parking space detection and **MQTT** for lightweight, low-latency data transmission from low-power and resource constrained edge devices.
 
----
+🥈 **SpotFinder** was awarded the Runner-Up position at the AIoTopia hackathon 2025.
 
-## 📌 Features
+## Features
 
 ###  Real-Time Detection
-- Detects occupied and vacant parking spots using camera feeds.
-- Uses YOLOv8 for object detection to ensure high accuracy.
+* Detects occupied and vacant parking spots using live camera feeds.
+* Utilizes YOLOv8 for accurate and efficient object detection.
 
-###  IoT Integration
-- Uses MQTT protocol to enable lightweight and fast data transmission between edge devices and the server.
-- Supports seamless real-time communication.
+###  IoT-Based Communication
+* Uses MQTT protocol to enable lightweight and low latency data transmission between edge devices and the server.
+* Enables real-time communication between edge devices and the server.
 
 ###  Live Web Dashboard
-- Displays parking status with live updates.
-- Helps users locate available parking spaces visually and efficiently.
+* Displays current parking availability with live updates
+* Provides GPS coordinates of available parking spots for easy navigation.
 
----
+## Architecture
 
-## 🛠️ Tech Stack
+SpotFinder follows a lightweight edge-to-dashboard architecture designed for low latency and modular deployment. The system separates detection, messaging, and visualization into independent components for scalability and maintainability.
 
-| Component     | Technology Used         |
-|--------------|--------------------------|
-| Computer Vision | YOLOv8 (Ultralytics)  |
-| Communication | MQTT (Mosquitto Broker) |
-| Backend       | Python                  |
-| Frontend      | HTML, CSS, JavaScript   |
-| Visualization | Real-time Web Dashboard |
+### 1. Edge Layer - Detection & Publishing
 
----
+* Captures photos every 10 seconds using a camera.
+* Runs inference on edge using the YOLOv8 model to detect parking space occupancy.
+* Publishes structured telemetry data as JSON messages to an MQTT topic.
 
-## 🔄 How It Works
+### 2. Messaging Layer - MQTT Broker
 
-Camera Feed → YOLOv8 Detection → MQTT Publisher → MQTT Broker → MQTT Subscriber → Web 
+* Receives telemetry data from edge devices by subscribing to the MQTT topic.
+* Parses JSON payloads to extract parking space status and GPS coordinates.
+* Performs upsert operations on the database to persist the latest parking space information.
 
+### 3. Data Layer - Relational Database
 
----
+* Uses AWS RDS (PostgreSQL) for managed, cloud-based relational database services.
+* Stores parking lot metadata and live parking occupancy status.
 
-## 🚀 Prerequisites
+### 4. Application Layer - Web Dashboard  
+
+* Flask-based web server that retrieves occupancy data from the AWS RDS database.
+* Provides users with an option to navigate to a parking lot using Google Maps.
+* Refreshes periodically to provide near real-time monitoring of parking space availability.
+
+## Getting Started
+
+### Prerequisites
 
 Before running the project, make sure you have the following installed:
 
-- ✅ Python 3.8+
-- ✅ pip (Python package manager)
-- ✅ MQTT Broker (e.g., Mosquitto)
+✅ Python 3.10+\
+✅ pip (Python package manager)\
+✅ An MQTT Broker (e.g., Mosquitto or AWS IoT Core)\
+✅ Edge processing unit with a camera module (e.g., Raspberry Pi)\
+✅ Verify that your database server is running.
 
 To check if Python and pip are installed:
 
@@ -54,30 +64,60 @@ python --version
 pip --version
 ```
 
-## 📂 Project Setup & Running the Environment
+### Installation
 
-1️⃣ Clone the Repository
-git clone https:https://github.com/NandithaNair19/SpotFinder.git
+1. Clone the Repository
+```
+git clone https://github.com/amanamitabh/SpotFinder.git
 cd spotfinder
+```
 
-2️⃣ Install Dependencies
-pip install ultralytics paho-mqtt opencv-python flask
+2. Install Dependencies
+```
+pip install -r requirements.txt
+```
 
-3️⃣ Start the Detection System
-python detect_parking.py
+3. Create a .env file in the edge-device directory and add the following environment variables:
+```
+DEVICE_NAME=<your_device_name>
+UUID=<your_device_uuid>
+TOPIC=<your_mqtt_topic>
+DEBUG=<1 for debug mode or 0 for production mode>
+```
 
-4️⃣ Start the Web Dashboard
+4. Create a .env file in the telemetry-server directory and add the following environment variables:
+```
+PASSWORD=<your_database_password>
+DATABASE=<your_database_name>
+USER=<your_database_user>
+SERVER=<your_database_server>
+PORT=<your_database_port>
+DRIVERNAME=<your_database_driver_name>
+UUID=<your_server_uuid>
+DEVICE_NAME=<your_server_device_name>
+TOPIC=<your_mqtt_topic>
+BROKER=<your_mqtt_broker_address>
+```
+
+5. Create a .env file in the web-dashboard directory and add the following environment variables:
+```
+PASSWORD=<your_database_password>
+DATABASE=<your_database_name>
+USER=<your_database_user>
+SERVER=<your_database_server>
+PORT=<your_database_port>
+```
+6.  Copy the edge-device/ directory to your edge processing unit (e.g., Raspberry Pi) and run the edge device script:
+```
+python edge_device.py
+```
+
+7. Copy the telemetry-server/ directory to your telemetry server and run the script:
+```
+python server.py
+```
+
+8. Copy the web-dashboard/ directory to the web server and run the web dashboard script:
+```
 python app.py
-
-Once running, visit:
-👉 http://localhost:5000/
-
-
-## 🏆 Achievement
-
-🥈 Runner-Up at AIOTopia -Gravitas'25
-Successfully integrated AI, IoT, and real-time data visualization into a single working prototype within 36 hours.
-
-
-💙 Made with innovation, teamwork, and a passion for solving real-world problems.
-
+```
