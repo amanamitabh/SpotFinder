@@ -76,7 +76,7 @@ client_telemetry_topic = id + '/' + topic
 
 # Creating MQTT client and connecting to broker
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_name)
-mqtt_client.connect('test.mosquitto.org', 1883)
+mqtt_client.connect("test.mosquitto.org", 1883)
 mqtt_client.loop_start()
 print("MQTT connected!")
 
