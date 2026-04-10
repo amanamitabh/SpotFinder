@@ -96,7 +96,6 @@ DRIVERNAME=<your_database_driver_name>
 UUID=<your_server_uuid>
 DEVICE_NAME=<your_server_device_name>
 TOPIC=<your_mqtt_topic>
-BROKER=<your_mqtt_broker_address>
 ```
 
 5. Create a .env file in the web-dashboard directory and add the following environment variables:
